@@ -1,59 +1,61 @@
-:root {
-  /* Paleta de Colores - Tonos Sobrios Administrativos */
-  --color-bg-main: #f4f6f8; /* Gris muy claro para el fondo */
-  --color-bg-sidebar: #1e293b; /* Azul pizarra oscuro */
-  --color-bg-sidebar-hover: #334155;
-  --color-bg-header: #ffffff; /* Blanco puro para tarjetas y cabecera */
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
   
-  --color-text-sidebar: #cbd5e1; /* Gris azulado claro */
-  --color-text-sidebar-active: #ffffff;
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-900: #0c4a6e;
   
-  --color-text-main: #334155; /* Texto oscuro principal */
-  --color-text-muted: #64748b; /* Texto secundario gris */
-  
-  --color-primary: #2563eb; /* Azul acento profesional */
-  --color-primary-hover: #1d4ed8;
-  
-  --color-border: #e2e8f0; /* Color de bordes sutiles */
-  
-  /* Sombras y transiciones */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --transition-fast: 0.2s ease-in-out;
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
 }
 
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer base {
+  body {
+    @apply bg-surface-50 text-slate-800 antialiased;
+  }
+  
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
 }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--color-bg-main);
-  color: var(--color-text-main);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-brand-600 to-brand-500 text-white font-medium py-2 px-4 rounded-xl shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer;
+  }
+  
+  .btn-secondary {
+    @apply bg-white border border-slate-200 text-slate-700 font-medium py-2 px-4 rounded-xl shadow-sm hover:bg-slate-50 hover:text-slate-900 transition-all duration-200 cursor-pointer;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden;
+  }
+  
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-xl shadow-slate-200/50;
+  }
+  
+  .input-base {
+    @apply w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm transition-all focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20 hover:border-slate-300 outline-none;
+  }
 }
 
-/* Clases utilitarias globales */
-.page-container {
-  padding: 24px;
-}
-
-.page-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--color-text-main);
-  margin-bottom: 24px;
-}
-
-/* Tarjeta base para el contenido de las vistas */
-.card-content {
-  background-color: var(--color-bg-header);
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  padding: 24px;
-  border: 1px solid var(--color-border);
+@media print {
+  body { background-color: white !important; }
+  .hide-on-print { display: none !important; }
+  .print-only { display: block !important; }
+  
+  .card, .glass-panel {
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0 !important;
+  }
 }

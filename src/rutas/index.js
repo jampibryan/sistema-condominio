@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DashboardView from '../views/DashboardView.vue'
+import DashboardView from '../vistas/DashboardView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,17 +12,17 @@ const router = createRouter({
     {
       path: '/recibos',
       name: 'recibos',
-      component: () => import('../views/RecibosView.vue')
+      component: () => import('../vistas/RecibosView.vue')
     },
     {
       path: '/propietarios',
       name: 'propietarios',
-      component: () => import('../views/PropietariosView.vue')
+      component: () => import('../vistas/PropietariosView.vue')
     },
     {
       path: '/departamentos',
       name: 'departamentos',
-      component: () => import('../views/DepartamentosView.vue')
+      component: () => import('../vistas/DepartamentosView.vue')
     }
   ]
 })
