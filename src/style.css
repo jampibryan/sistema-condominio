@@ -1,0 +1,59 @@
+:root {
+  /* Paleta de Colores - Tonos Sobrios Administrativos */
+  --color-bg-main: #f4f6f8; /* Gris muy claro para el fondo */
+  --color-bg-sidebar: #1e293b; /* Azul pizarra oscuro */
+  --color-bg-sidebar-hover: #334155;
+  --color-bg-header: #ffffff; /* Blanco puro para tarjetas y cabecera */
+  
+  --color-text-sidebar: #cbd5e1; /* Gris azulado claro */
+  --color-text-sidebar-active: #ffffff;
+  
+  --color-text-main: #334155; /* Texto oscuro principal */
+  --color-text-muted: #64748b; /* Texto secundario gris */
+  
+  --color-primary: #2563eb; /* Azul acento profesional */
+  --color-primary-hover: #1d4ed8;
+  
+  --color-border: #e2e8f0; /* Color de bordes sutiles */
+  
+  /* Sombras y transiciones */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --transition-fast: 0.2s ease-in-out;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Clases utilitarias globales */
+.page-container {
+  padding: 24px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 24px;
+}
+
+/* Tarjeta base para el contenido de las vistas */
+.card-content {
+  background-color: var(--color-bg-header);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  border: 1px solid var(--color-border);
+}
