@@ -1,7 +1,6 @@
 <script setup>
 import Modal from './Modal.vue'
 import { formatCurrency, formatDate } from '../../utilidades/formatters'
-import { recibo } from '../../servicios/mockData'
 
 const props = defineProps({
   isOpen: {
@@ -9,6 +8,10 @@ const props = defineProps({
     default: false
   },
   receiptData: {
+    type: Object,
+    default: () => ({})
+  },
+  globalReceipt: {
     type: Object,
     default: () => ({})
   }
@@ -44,11 +47,11 @@ const handlePrint = () => {
       <div class="space-y-3 mb-8">
         <div class="flex justify-between items-center text-sm">
           <span class="text-slate-500">Periodo Facturado:</span>
-          <span class="font-bold text-slate-800">{{ formatDate(recibo.fecha_inicio) }} - {{ formatDate(recibo.fecha_fin) }}</span>
+          <span class="font-bold text-slate-800">{{ formatDate(globalReceipt?.fecha_inicio) }} - {{ formatDate(globalReceipt?.fecha_fin) }}</span>
         </div>
         <div class="flex justify-between items-center text-sm">
           <span class="text-slate-500">Fecha Emisión:</span>
-          <span class="font-bold text-slate-800">{{ formatDate(recibo.fecha_emision) }}</span>
+          <span class="font-bold text-slate-800">{{ formatDate(globalReceipt?.fecha_emision) }}</span>
         </div>
         <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 mt-4">
           <div class="flex justify-between items-center mb-2">
