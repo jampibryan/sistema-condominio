@@ -1,25 +1,25 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { fetchGet } from '../servicios/api'
+import { ref, computed, onMounted } from 'vue'
+import { useDepartamentos } from '../composables/useDepartamentos'
+import { useOcupaciones } from '../composables/useOcupaciones'
+import { useRecibos } from '../composables/useRecibos'
 import { formatCurrency } from '../utilidades/formatters'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const isLoading = ref(true)
-const recibos = ref([])
-const departamentos = ref([])
-const ocupaciones = ref([])
+
+const { departamentos, cargarDepartamentos } = useDepartamentos()
+const { ocupaciones, cargarOcupaciones } = useOcupaciones()
+const { recibos, cargarRecibos } = useRecibos()
 
 onMounted(async () => {
   try {
-    const [r, d, o] = await Promise.all([
-      fetchGet('obtenerRecibos'),
-      fetchGet('obtenerDepartamentos'),
-      fetchGet('obtenerOcupaciones')
+    await Promise.all([
+      cargarRecibos(),
+      cargarDepartamentos(),
+      cargarOcupaciones()
     ])
-    recibos.value = r || []
-    departamentos.value = d || []
-    ocupaciones.value = o || []
   } catch (e) {
     console.error(e)
   } finally {

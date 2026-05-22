@@ -1,21 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { fetchGet } from '../servicios/api'
+import { onMounted } from 'vue'
+import { useDepartamentos } from '../composables/useDepartamentos'
 
-const departamentos = ref([])
-const isLoading = ref(true)
-const error = ref(null)
+const { departamentos, isLoading, error, cargarDepartamentos } = useDepartamentos()
 
-onMounted(async () => {
-  try {
-    departamentos.value = await fetchGet('obtenerDepartamentos')
-  } catch (e) {
-    error.value = "No se pudieron cargar los departamentos."
-    console.error(e)
-  } finally {
-    isLoading.value = false
-  }
-})
+onMounted(cargarDepartamentos)
 
 const torreColors = {
   A: 'from-blue-500 to-cyan-400',

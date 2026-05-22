@@ -1,22 +1,11 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { fetchGet } from '../servicios/api'
+import { onMounted, computed } from 'vue'
+import { useOcupaciones } from '../composables/useOcupaciones'
 import { formatDate } from '../utilidades/formatters'
 
-const ocupaciones = ref([])
-const isLoading = ref(true)
-const error = ref(null)
+const { ocupaciones, isLoading, error, cargarOcupaciones } = useOcupaciones()
 
-onMounted(async () => {
-  try {
-    ocupaciones.value = await fetchGet('obtenerOcupaciones')
-  } catch (e) {
-    error.value = "Error al cargar ocupaciones."
-    console.error(e)
-  } finally {
-    isLoading.value = false
-  }
-})
+onMounted(cargarOcupaciones)
 
 const vigentes = computed(() => ocupaciones.value.filter(o => !o.fecha_salida))
 const finalizados = computed(() => ocupaciones.value.filter(o => o.fecha_salida))

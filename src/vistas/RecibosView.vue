@@ -1,18 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { fetchGet, fetchPost, invalidateCache } from '../servicios/api'
+import { useBilling } from '../composables/useBilling'
 import { formatCurrency, formatDate } from '../utilidades/formatters'
 import ReceiptModal from '../componentes/common/ReceiptModal.vue'
 
 const showForm = ref(false)
-const isCalculating = ref(false)
-const isLoading = ref(true)
-const error = ref(null)
 const successMessage = ref(null)
 
-const recibo = ref({})
-const resumenPropietarios = ref([])
-const detalleRecibos = ref([])
+const {
+  recibo,
+  resumenPropietarios,
+  detalleRecibos,
+  isCalculating,
+  isLoading,
+  error,
+  cargarUltimoReciboData,
+  generarYGuardarRecibo
+} = useBilling()
 
 const isModalOpen = ref(false)
 const selectedReceipt = ref(null)
@@ -26,51 +30,11 @@ const form = ref({
   fecha_emision: ''
 })
 
-const cargarDatos = async () => {
-  try {
-    isLoading.value = true
-    error.value = null
-
-    // Peticiones en PARALELO para máxima velocidad
-    const [recibos, resumenTotal, detalleTotal] = await Promise.all([
-      fetchGet('obtenerRecibos'),
-      fetchGet('obtenerResumen'),
-      fetchGet('obtenerDetalles')
-    ])
-
-    if (recibos && recibos.length > 0) {
-      const ultimoRecibo = recibos[recibos.length - 1]
-      const idRecibo = recibos.length
-
-      recibo.value = {
-        fecha_inicio: ultimoRecibo.fecha_inicio,
-        fecha_fin: ultimoRecibo.fecha_fin,
-        agua: ultimoRecibo.agua,
-        alcantarillado: ultimoRecibo.alcantarillado,
-        mntto_redes: ultimoRecibo.mntto_redes,
-        total: ultimoRecibo.total,
-        fecha_emision: ultimoRecibo.fecha_emision
-      }
-
-      resumenPropietarios.value = resumenTotal.filter(r => Number(r.id_recibo) === idRecibo)
-      detalleRecibos.value = detalleTotal.filter(d => Number(d.id_recibo) === idRecibo)
-    }
-  } catch (e) {
-    error.value = "Error al conectar con Google Sheets. Intenta recargar la página."
-    console.error(e)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-onMounted(cargarDatos)
+onMounted(cargarUltimoReciboData)
 
 const handleCalcular = async () => {
   try {
-    isCalculating.value = true
-    error.value = null
-
-    await fetchPost('generarRecibo', {
+    await generarYGuardarRecibo({
       fecha_inicio: form.value.fecha_inicio,
       fecha_fin: form.value.fecha_fin,
       agua: Number(form.value.agua),
@@ -79,16 +43,12 @@ const handleCalcular = async () => {
       fecha_emision: form.value.fecha_emision
     })
 
-    successMessage.value = "¡Recibo generado y guardado en Google Sheets!"
+    successMessage.value = "¡Recibo generado y guardado en Supabase!"
     showForm.value = false
-    await cargarDatos()
     setTimeout(() => { successMessage.value = null }, 5000)
     form.value = { fecha_inicio: '', fecha_fin: '', agua: null, alcantarillado: null, mntto_redes: null, fecha_emision: '' }
   } catch (e) {
-    error.value = "Hubo un problema al generar el recibo."
     console.error(e)
-  } finally {
-    isCalculating.value = false
   }
 }
 
@@ -200,7 +160,7 @@ const avatarColors = [
         <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-cyan-400 flex items-center justify-center animate-pulse shadow-lg shadow-brand-500/30">
           <svg class="h-6 w-6 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
         </div>
-        <p class="text-slate-500 font-medium text-sm">Conectando con Google Sheets...</p>
+        <p class="text-slate-500 font-medium text-sm">Conectando con Supabase...</p>
       </div>
     </div>
 
